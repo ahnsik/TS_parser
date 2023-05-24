@@ -1,6 +1,35 @@
 body {
     background-color: #DFF;
 }
+li { list-style: none; }
+a { text-decoration: none; }
+
+nav {
+    float: right;
+}
+.nav-items {
+    margin-right: 20px;
+}
+.nav-items > li {
+    display: inline-block;  /* 가로정렬 */
+}
+.nav-items > li > a {
+    /* for Vertical Centering */
+    padding: 0 5px;
+    color: rgba(0, 0, 0, 0.4);
+    border-radius: 20px;
+    background-color: aquamarine;
+}
+.nav-items > li > a:hover {
+    color: rgba(0, 0, 0, 0.8);
+    background-color: rgb(125, 207, 179);
+}
+
+
+
+#ts_file_in {
+    border: 3px solid darkgray;
+}
 
 table, td, th {
     border-collapse: collapse;
@@ -14,6 +43,10 @@ th {
 }
 td {
     background-color: #e7e4e2;
+}
+
+#optional_field_detail {
+    margin: 2em;
 }
 
 textarea {
@@ -30,19 +63,16 @@ textarea {
 
 .result {
     padding: 20px;
+    border: 1px solid blueviolet;
 }
 .stream_input {
-    margin-top: 40px;
-    padding: 20px;
+    /* margin-top: 40px; */
+    padding: 40px;
 }
 
-input {
-    width: "100%";
-}
-
-#dvbstp_file_in {
+/* #ts_file_in {
     border: 1px solid royalblue;
-}
+} */
 
 sub {
     color: rgb(111, 116, 106);

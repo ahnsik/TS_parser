@@ -8,12 +8,21 @@
   </head>
   <body>
     <header>
-      <h1>Mpeg System (ISO-10646-1) TS packet 구조 </h1> <h6>by aschoi@aircode.com</h6>
-        <img src="./resources/ts_syntax.png"/>
+      MPEG System (ISO-10646-1) TS packet
+      <nav>
+        <ul class="nav-items">
+          <li><a href="../DVBSTP_packetizer/index.html">DVBSTP</a></li>
+          <li><a href="../DVBSTP_packetizer/CRID_parse/index.html">CRI container</a></li>
+          <li><a href="../DVBSTP_packetizer/CRID_parse/dsmcc-addressable/index.html">DSMCC-addressable</a></li>
+        </ul>
+      </nav>
     </header>
+    <hr>
+    <h1>Mpeg System (ISO-10646-1) TS packet 구조 </h1> <h6>by aschoi@aircode.com</h6>
+    <img width="854px" height="600px" src="./resources/ts_syntax.png"/>
 
     <div class="stream_input">
-        스트림파일: <input type="file" id="dvbstp_file_in" accept=".*" onchange="ts_file_changed();"/><span class="comment">Drag & Drop available.</span>
+        스트림파일: <input type="file" id="ts_file_in" accept=".*" onchange="ts_file_changed();"/><span class="comment">Drag & Drop available.</span>
         <br/> 또는 <br/>
         텍스트로 입력 (16진수 DUMP): <br/>
         <textarea id="ts_packet" cols="80" rows="4" onchange="ts_from_text();"></textarea>
@@ -21,11 +30,11 @@
 
     <div class="commands" style="text-align: center;">
       <input type="button" value="Parse Next TS packet..(188 bytes)"> </input>
-      <input type="button" value="Search & Parse with PID.."> </input> <input id="parsing_pid" type="text" value="PID (hex)"> </input>
+      <!-- <input type="button" value="Search & Parse with PID.."> </input> <input id="parsing_pid" type="text" value="PID (hex)"> </input> -->
     </div>
 
     <div  class="result">
-        <h3>header parsing 결과:</h3>
+        <h3>header parsing 결과: <span id="packet_id"></span></h3>
         <table>
             <th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th>    <th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th>
             <tr>
@@ -34,7 +43,7 @@
               <td id="pid" colspan="13">PID</td><td id="ts_scrmb_ctrl" colspan="2">transport<br/>scrambling<br/>control</td>
               <td id="adapt_field_ctrl" colspan="2">adaptation<br/>field<br/>control</td><td id="cont_count" colspan="4">continuity<br/>counter</td>
             </tr>
-            <tr class=".adaptation_field">
+            <tr id="adaptation_field">
                 <td id="adapt_field_len" colspan="8">adaptation<br/>field<br/>length</td><td id="discont_indi" colspan="1">discontinuity<br/>indicator</td>
                 <td id="rnd_accs_indi" colspan="1">random<br/>access<br/>indicator</td><td id="es_prio_indi" colspan="1">elementary<br/>stream<br/>priority<br/>indicator</td>
                 <td id="pcr_flg" colspan="1">PCR<br/>flag</td><td id="opcr_flg" colspan="1">OPCR<br/>flag</td><td id="splc_pont_flg" colspan="1">splicing<br/>point<br/>flag</td>
@@ -43,34 +52,49 @@
             </tr>
         </table>
 
-        <p>
+        <div id="optional_field_detail">
           optional fields:<br/>
           <table>
               <th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th>    <th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th>
               <tr>
-                <td id="pcr_high" colspan="32">PCR</td>
+                <td id="pcr_base" colspan="32">PCR_base</td>
               </tr>
               <tr>
-                <td id="pcr_low" colspan="16">PCR</td><td id="opcr_high" colspan="16">OPCR</td>
+                <td  id="pcr_dummy" colspan="1">-</td><td id="pcr_reserve" colspan="6"><sub>reserved</sub></td><td id="pcr_ext" colspan="9">PCR_extension</td>
+                <td id="opcr_dummy" colspan="16"><sub>OPCR_base</sub></td>
               </tr>
               <tr>
-                <td id="opcr_low" colspan="32">OPCR</td>
+                <td id="opcr_base" colspan="17">OPCR_base</td><td id="opcr_reserve" colspan="6"><sub>reserved</sub></td><td id="opcr_ext" colspan="9">OPCR_extension</td>
               </tr>
               <tr>
                 <td id="splice_cnt_down" colspan="8">splice<br/>countdown</td>
                 <td id="ts_priv_data_length" colspan="8">transport<br/>private<br/>data<br/>length</td>
                 <td id="priv_data_bytes" colspan="16">private<br/>data<br/>bytes</td>
               </tr>
-              <tr class=".adaptation_extention">
+              <tr>
                 <td id="adapt_extent_length" colspan="8">adaptation<br/>field extention<br/>length</td>
                 <td id="ltw_flg" colspan="1">LTW<br/>flag</td>
                 <td id="pcw_rate_flg" colspan="1">piece<br/>wise<br/>rate<br/>flag</td>
                 <td id="smls_splic_flg" colspan="1">seamless<br/>splice<br/>flag</td>
                 <td id="reserved" colspan="5">reserved</td>
-                <td id="adapt_option_field" colspan="16">----</td>
+                <td id="ltw_valid_flag" colspan="1">ltw_valid_flag</td>
+                <td id="ltw_offset" colspan="15">ltw_offset</td>
+              </tr>
+              <tr>
+                <td id="reserved2" colspan="2" style="background-color:darkgray"></td>
+                <td id="piecewise_rate" colspan="22">piecewise_rate</td>
+                <td id="splice_type" colspan="4">splice_type</td>
+                <td id="DTS_next_AU" colspan="4">DTS_next_AU..</td>
+              </tr>
+              <tr>
+                <td id="reserved3" colspan="32"><sub>reserved</sub></td>
+              </tr>
+              <tr>
+                <td id="stuff_bytes" colspan="32"><sub>stuffing_bytes</sub></td>
               </tr>
           </table>
-        </p>
+        </div>
+
     </div>
 
     <div class="result" id="payload">
@@ -79,6 +103,16 @@
       <textarea name="payload_hex" id="payload_hex" cols="120" rows="10"></textarea>
       <input type="button" value="TXT파일로저장"/><input type="button" value="bin파일로저장"/>
     </div>
+
+    <div class="result" id="pat_table">
+      <table>
+        <th>pid</th><th>1</th>
+        <tr>
+
+        </tr>
+      </table>
+    </div>
+
 
   </body>
 
