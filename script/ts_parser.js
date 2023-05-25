@@ -50,9 +50,7 @@ var val_stuff_adapt = "";
 
 var val_payload = "";
 
-
 var ts_header_parse = (blob) => {
-
     val_syncbyte = blob[0];
     val_ts_error_indi = (blob[1]>>7)&0x01;
     val_pusi = (blob[1]>>6)&0x01;
@@ -424,19 +422,22 @@ var set_option_parse_result = () => {
     
 }
     
-var get_ts_packet = (buffer) => {
-    return buffer.slice(0, 188);
+var get_ts_packet = (buffer, start_offset) => {
+    let read_end = parseInt(start_offset)+188;
+    console.log(" reading bytes from "+start_offset+" to "+read_end );
+    return buffer.slice(start_offset,read_end);
 }
 
+var read_offset = 0;
 
-var ts_file_changed = (imgsrc) => {    /* when ThumbNail file upload succed. */
+var ts_file_changed = () => {    /* when ThumbNail file upload succed. */
     let loadingfiles = document.getElementById("ts_file_in");  //.dataTransfer.files;
     console.log(" 파일"+ loadingfiles.files[0].name +" .. Loading ..");
     const reader = new FileReader();
     reader.addEventListener('load', (event) => {
         let buffer = new Uint8Array(reader.result);
-        let ts_packet = get_ts_packet(buffer);
-        console.log("check : \n" + dump_blob(ts_packet,0) );
+        let ts_packet = get_ts_packet(buffer, read_offset);
+        // console.log("check : \n" + dump_blob(ts_packet,0) );
         document.getElementById("ts_packet").value = dump_blob(ts_packet,0);
         ts_header_parse(ts_packet);
         set_result();
@@ -457,6 +458,11 @@ var ts_from_text = () => {
     set_result();
 }
 
+var read_offset_188bytes = () => {
+    let offset_value = document.getElementById("read_offset").value;
+    read_offset = offset_value;
+    ts_file_changed();
+}
 
 window.onload = function main() {
     // set_result();
@@ -483,6 +489,13 @@ var convert_text_to_blob = (inputtext) => {
     return ia;
 }
 
+//////////////////////////// 이런 종류의 parsing 할 때 기본적으로 사용되는 몇가지 함수들.
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 var dump_blob = (data, start_idx) => {
     var dump_str = ""; 
     for (let i= start_idx; i< data.length; i++) {

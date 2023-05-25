@@ -29,7 +29,7 @@
     </div>
 
     <div class="commands" style="text-align: center;">
-      <input type="button" value="Parse Next TS packet..(188 bytes)"> </input>
+      <span class="action_link" onclick="read_offset_188bytes();">FILE READ OFFSET <input id="read_offset" type="number" value="0"/>bytes </span>
       <!-- <input type="button" value="Search & Parse with PID.."> </input> <input id="parsing_pid" type="text" value="PID (hex)"> </input> -->
     </div>
 
@@ -113,6 +113,9 @@
       </table>
     </div>
 
+    <img src="./resources/mpeg_table_id.png"/>
+    
+    mpeg_table_id.png
 
   </body>
 

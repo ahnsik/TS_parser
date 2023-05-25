@@ -57,6 +57,18 @@ textarea {
     color: lightgray;
 }
 
+.action_link {
+    background-color: lightblue;
+    border-radius: 20px;
+    padding: 8px;
+}
+.action_link:hover {
+    background-color: rgb(145, 171, 180);
+}
+#read_offset {
+    width: 5em;
+}
+
 .result td {
     color: darkblue;
 }
