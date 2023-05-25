@@ -286,6 +286,7 @@ var set_result = () => {
     }
 
     document.getElementById("payload_hex").innerText = dump_blob(val_payload, 0);
+    make_dsmcc_addr_link();
 }
 
 var packet_kind_text = (pid) => {
@@ -462,6 +463,19 @@ var read_offset_188bytes = () => {
     let offset_value = document.getElementById("read_offset").value;
     read_offset = offset_value;
     ts_file_changed();
+}
+
+var next_188bytes= () => {
+    read_offset += 188;
+    document.getElementById("read_offset").value = read_offset;
+    ts_file_changed();
+}
+
+var make_link = () => {
+    let dsmcc_link_tag = document.getElementById("goto_link");
+    dsmcc_link_tag.innerHTML = "<a href='http://ccash.gonetis.com:88/TS_analyzer/DSMCC-addressable/index.html?payload="+dump_blob(val_payload, 0)+"'>DSMCC-addressable</a>";
+    let pat_link_tag = document.getElementById("goto_pat");
+    pat_link_tag.innerHTML = "<a href='http://ccash.gonetis.com:88/TS_analyzer/PAT_packet/index.html?payload="+dump_blob(val_payload, 0)+"'>PAT parse</a>";
 }
 
 window.onload = function main() {

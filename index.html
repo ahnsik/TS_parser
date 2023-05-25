@@ -19,17 +19,18 @@
     </header>
     <hr>
     <h1>Mpeg System (ISO-10646-1) TS packet 구조 </h1> <h6>by aschoi@aircode.com</h6>
-    <img width="854px" height="600px" src="./resources/ts_syntax.png"/>
+    <img width="854px" height="420px" src="./resources/ts_syntax.png"/>
 
     <div class="stream_input">
-        스트림파일: <input type="file" id="ts_file_in" accept=".*" onchange="ts_file_changed();"/><span class="comment">Drag & Drop available.</span>
+        스트림파일: <input class="drag_drop" type="file" id="ts_file_in" accept=".*" onchange="ts_file_changed();"/><span class="comment">Drag & Drop available.</span>
+        <span class="action_link" onclick="read_offset_188bytes();">FILE READ OFFSET <input id="read_offset" type="number" value="0"/>bytes </span>
+        <span class="action_link" onclick="next_188bytes();">Next 188 bytes</span>
         <br/> 또는 <br/>
         텍스트로 입력 (16진수 DUMP): <br/>
         <textarea id="ts_packet" cols="80" rows="4" onchange="ts_from_text();"></textarea>
     </div>
 
     <div class="commands" style="text-align: center;">
-      <span class="action_link" onclick="read_offset_188bytes();">FILE READ OFFSET <input id="read_offset" type="number" value="0"/>bytes </span>
       <!-- <input type="button" value="Search & Parse with PID.."> </input> <input id="parsing_pid" type="text" value="PID (hex)"> </input> -->
     </div>
 
@@ -101,16 +102,9 @@
       <h3>PAYLOAD STACK:</h3>
       <h4>PID: <span id="payload_1_pid"></span> </h4>
       <textarea name="payload_hex" id="payload_hex" cols="120" rows="10"></textarea>
-      <input type="button" value="TXT파일로저장"/><input type="button" value="bin파일로저장"/>
-    </div>
-
-    <div class="result" id="pat_table">
-      <table>
-        <th>pid</th><th>1</th>
-        <tr>
-
-        </tr>
-      </table>
+      <!-- <input type="button" value="TXT파일로저장"/><input type="button" value="bin파일로저장"/> -->
+      <span class="action_link" id="goto_link" onclick="make_link();">goto..</span>
+      <span class="action_link" id="goto_pat" onclick="make_link();">goto..</span>
     </div>
 
     <img src="./resources/mpeg_table_id.png"/>
