@@ -100,11 +100,14 @@
 
     <div class="result" id="payload">
       <h3>PAYLOAD STACK:</h3>
-      <h4>PID: <span id="payload_1_pid"></span> </h4>
-      <textarea name="payload_hex" id="payload_hex" cols="120" rows="10"></textarea>
-      <!-- <input type="button" value="TXT파일로저장"/><input type="button" value="bin파일로저장"/> -->
-      <span class="action_link" id="goto_link" onclick="make_link();">goto..</span>
-      <span class="action_link" id="goto_pat" onclick="make_link();">goto..</span>
+      <p>PID: <span id="payload_1_pid"></span><br/>
+      <textarea name="payload_hex" id="payload_hex" cols="120" rows="6"></textarea>
+      <span class="action_link" id="goto_table" onclick="make_link();">goto..</span>
+      </p>
+      <p>next Payload:<br/>
+        <textarea name="payload_hex_next" id="payload_hex_next" cols="120" rows="4"></textarea>
+        <span class="action_link" id="next_packet_pat" onclick="make_next_link();">goto..</span>
+      </p>
     </div>
 
     <img src="./resources/mpeg_table_id.png"/>

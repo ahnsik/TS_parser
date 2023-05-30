@@ -49,6 +49,7 @@ var val_option_field = "";
 var val_stuff_adapt = "";
 
 var val_payload = "";
+var payload_start = 0;
 
 var ts_header_parse = (blob) => {
     val_syncbyte = blob[0];
@@ -80,6 +81,13 @@ var ts_header_parse = (blob) => {
     }
 
     if ( (val_adapt_field_ctrl==1) || (val_adapt_field_ctrl==3) ) {     // payload 가 있을 때에만.
+        if (val_pusi) {
+            payload_start = blob[offset];
+            offset++;
+        } else {
+            payload_start = -1;
+        }
+
         console.log("offset="+offset);
 
     }
@@ -285,8 +293,39 @@ var set_result = () => {
         txt_stuff_adapt.innerHTML = "";
     }
 
-    document.getElementById("payload_hex").innerText = dump_blob(val_payload, 0);
-    make_dsmcc_addr_link();
+    if (val_pusi && (payload_start > 0)) {
+        let old_packet = val_payload.slice(0, payload_start-1);
+        let new_packet = val_payload.slice(payload_start, val_payload.length);
+        document.getElementById("payload_hex").innerText = dump_blob(old_packet, 0);
+        document.getElementById("payload_hex_next").innerText = dump_blob(new_packet, 0);
+    } else {
+        document.getElementById("payload_hex").innerText = dump_blob(val_payload, 0);
+        document.getElementById("payload_hex_next").innerText = "";
+    }
+
+    let display_pid = document.getElementById("payload_1_pid");
+    display_pid.innerText = val_pid+" (0x"+val_pid.toString(16).toUpperCase()+")";
+
+    switch(val_payload[0]) {
+        case 0x00:      // PAT
+            if (val_pid==0) {
+                display_pid.innerHTML += " Table_id=" +val_payload[0]+" (0x"+val_payload[0].toString(16).toUpperCase() +") is PAT.";
+                display_pid.style.backgroundColor = "lightgreen";
+            }
+            break;
+        case 0x02:      // PMT
+            display_pid.innerHTML += " Table_id=" +val_payload[0]+" (0x"+val_payload[0].toString(16).toUpperCase() +") is PMT.";
+            display_pid.style.backgroundColor = "lightblue";
+            break;
+        case 0x3F:
+            display_pid.innerHTML += " Table_id=" +val_payload[0]+" (0x"+val_payload[0].toString(16).toUpperCase() +") is DSM-CC_addressable.";
+            display_pid.style.backgroundColor = "lightyellow";
+            break;
+        default:
+            display_pid.style.backgroundColor = "";
+            break;
+    }
+    make_link();
 }
 
 var packet_kind_text = (pid) => {
@@ -466,16 +505,27 @@ var read_offset_188bytes = () => {
 }
 
 var next_188bytes= () => {
-    read_offset += 188;
+    read_offset = parseInt(read_offset)+188;
     document.getElementById("read_offset").value = read_offset;
     ts_file_changed();
 }
 
 var make_link = () => {
-    let dsmcc_link_tag = document.getElementById("goto_link");
-    dsmcc_link_tag.innerHTML = "<a href='http://ccash.gonetis.com:88/TS_analyzer/DSMCC-addressable/index.html?payload="+dump_blob(val_payload, 0)+"'>DSMCC-addressable</a>";
-    let pat_link_tag = document.getElementById("goto_pat");
-    pat_link_tag.innerHTML = "<a href='http://ccash.gonetis.com:88/TS_analyzer/PAT_packet/index.html?payload="+dump_blob(val_payload, 0)+"'>PAT parse</a>";
+    let pat_link_tag = document.getElementById("goto_table");
+    switch(val_payload[0]) {
+        case 0x00:      // PAT
+            pat_link_tag.innerHTML = "<a href='http://ccash.gonetis.com:88/TS_analyzer/PAT_packet/index.html?payload="+dump_blob(val_payload, 0)+"'>PAT parse</a>";
+            break;
+        case 0x02:      // PMT
+            pat_link_tag.innerHTML = "<a href='http://ccash.gonetis.com:88/TS_analyzer/PMT_packet/index.html?payload="+dump_blob(val_payload, 0)+"'>PMT parse</a>";
+            break;
+        case 0x3F:
+            pat_link_tag.innerHTML = "<a href='http://ccash.gonetis.com:88/TS_analyzer/DSMCC-addressable/index.html?payload="+dump_blob(val_payload, 0)+"'>DSMCC addressable parse</a>";
+            break;
+        default:
+            break;
+    }
+
 }
 
 window.onload = function main() {

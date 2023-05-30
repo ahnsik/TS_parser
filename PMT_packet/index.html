@@ -6,28 +6,28 @@
     <link rel="stylesheet" type="text/css" href="../style/fontstyle.css" />
     <link rel="stylesheet" type="text/css" href="../style/packetparser.css" />
 
-    <title> MPEG System. PAT table parser</title>
+    <title> MPEG System. PMT table parser</title>
     <style>
       body {
-          background-color: rgb(215, 243, 230);
+          background-color: rgb(237, 243, 215);
       }
     </style>
   </head>
   <body>
     <header>
       <a id="top" class="action_link" href="http://ccash.gonetis.com:88/TS_analyzer/index.html">TOP</a>
-      <h1>MPEG System. PAT table parser </h1> <h6>by aschoi@aircode.com</h6>
-      <img src="../resources/PAT_section.png" width="540px" height="460px"/>
+      <h1>MPEG System. PMT table parser </h1> <h6>by aschoi@aircode.com</h6>
+      <img src="../resources/PMT_section.png" width="540px" height="440px"/>
     </header>
 
     <div class="stream_input">
-        스트림파일 : <input class="drag_drop" type="file" id="packet_file_in" accept=".*" onchange="pat_file_changed();"/><span class="comment">Drag & Drop available.</span>
+        스트림파일 : <input class="drag_drop" type="file" id="packet_file_in" accept=".*" onchange="stream_file_changed();"/><span class="comment">Drag & Drop available.</span>
         <br/> 또는  <br/>
         텍스트로 입력 (16진수 DUMP): <br/>
-        <textarea id="packet_dump" cols="80" rows="4" onchange="pat_from_text();"></textarea>
+        <textarea id="packet_dump" cols="80" rows="4" onchange="parse_from_text();"></textarea>
     </div>
     <div  class="result">
-      <p class="comment">iso13818-1.pdf.  Table 2-25 Program association section </p>
+      <p class="comment">iso13818-1.pdf.  Table 2-28 Program Map Table section </p>
       결과:<br/>
       <table>
         <th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th>    <th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th>
@@ -37,10 +37,10 @@
           <td id="mustbe_0" colspan="1">'0'</td>
           <td id="reserved_1" colspan="2">reserved</td>
           <td id="section_len" colspan="12">section_length</td>
-          <td id="ts_id_high" colspan="8">transport_stream_id</td>
+          <td id="prgm_num_h" colspan="8">program_number</td>
         </tr>
         <tr>
-          <td id="ts_id_low" colspan="8">transport_stream_id</td>
+          <td id="prgm_num_l" colspan="8">program_number</td>
           <td id="reserved_2" colspan="2">reserved</td>
           <td id="version_num" colspan="5">version<br/>number</td>
           <td id="cur_next_indi" colspan="1">curr<br/>next<br/>indi</td>
@@ -48,10 +48,20 @@
           <td id="last_section_num" colspan="8">last_section_number</td>
         </tr>
         <tr>
-          <td id="program_num" colspan="16">program number</td>
           <td id="reserved_3" colspan="3">reserved</td>
-          <td id="pmt_pid" colspan="13">Program Map PID</td>
+          <td id="pcr_pid" colspan="13">PCR PID</td>
+          <td id="reserved_4" colspan="4">reserved</td>
+          <td id="prgm_info_len" colspan="12">program_info_length</td>
         </tr>
+          <td id="descriptor" colspan="32">descriptor</td>
+        <tr>
+          <td id="stream_type" colspan="8">stream_type</td>
+          <td id="reserved_5" colspan="3">reserved</td>
+          <td id="elem_pid" colspan="5">elementary_PID</td>
+          <td id="reserved_6" colspan="4">reserved</td>
+          <td id="ES_info_len" colspan="12">ES_info_length</td>
+        </tr>
+          <td id="es_descriptor" colspan="32">descriptor</td>
         <tr>
           <td id="crc_32" colspan="32">CRC_32</td>
         </tr>
@@ -65,9 +75,11 @@
       </ul>
     </div>
 
+    <img src="../resources/stream_type.png"/>
+
   </body>
 
-  <script src="../script/pat_parser.js" type="text/javascript" charset="utf-8"> </script>
+  <script src="../script/pmt_parser.js" type="text/javascript" charset="utf-8"> </script>
 </html>
 
 

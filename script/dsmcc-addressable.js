@@ -202,7 +202,7 @@ var set_result = () => {
 
     let txt_datagram = document.getElementById("SNU_low");
     if (val_LLC_flag==1) {
-        txt_datagram.innerHTML = "<sub>LLCSNAP():</sub>"+val_datagram_data;
+        txt_datagram.innerHTML = "<sub>LLCSNAP():</sub>"+dump_blob(val_datagram_data.slice(0,40), 0)+"...";
     } else {
         txt_datagram.innerHTML = "<sub>datagram_data_byte<br/>:</sub>"+dump_blob(val_datagram_data.slice(0,40), 0)+"...";
     }
