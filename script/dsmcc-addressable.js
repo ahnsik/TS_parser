@@ -144,25 +144,31 @@ var set_result = () => {
     if (mustbe_0 != 0) {
         txt_mustbe_0.style.backgroundColor="RED";
     } else {
+        txt_mustbe_0.style.backgroundColor="";
         txt_mustbe_0.style.color="darkgray";
     }
 
     let txt_err_detect_type = document.getElementById("error_detection_type");
-    txt_err_detect_type.innerHTML = "<sub>err<br/>dtct<br/>:</sub>"+val_err_detect_type;
+    txt_err_detect_type.innerHTML = "<sub>err<br/>:</sub>"+val_err_detect_type;
     if (val_err_detect_type!=0) {
         txt_err_detect_type.style.backgroundColor="red";
+    } else {
+        txt_err_detect_type.style.backgroundColor="";
     }
     let txt_reserved_1 = document.getElementById("reserved_1");
     txt_reserved_1.innerHTML = "<sub>rsrvd:</sub>"+val_reserved_1;
     if (val_reserved_1 != 3) {
         txt_reserved_1.style.backgroundColor="RED";
     } else {
+        txt_reserved_1.style.backgroundColor="";
         txt_reserved_1.style.color="DARKGRAY";
     }
     let txt_addr_section_len = document.getElementById("addrsect_len");
     txt_addr_section_len.innerHTML = "<sub>addressable section length:</sub> " + val_addr_section_len+" (0x"+val_addr_section_len.toString(16).toUpperCase()+")";
     if (val_addr_section_len >= 4093) {
         txt_addr_section_len.style.backgroundColor = "RED";
+    } else {
+        txt_addr_section_len.style.backgroundColor = "";
     }
     let txt_devId_0 = document.getElementById("devid_0");
     txt_devId_0.innerHTML = "<sub>deviceId[7..0]:<br/></sub>" + val_devId_0.toString(16).toUpperCase();
@@ -173,6 +179,7 @@ var set_result = () => {
     if (val_reserved_2 != 3) {
         txt_reserved_2.style.backgroundColor="RED";
     } else {
+        txt_reserved_2.style.backgroundColor="";
         txt_reserved_2.style.color="DARKGRAY";
     }
     let txt_payl_scrmb_ctrl = document.getElementById("payload_scrmb_ctrl");
@@ -185,6 +192,7 @@ var set_result = () => {
     if (mustbe_1 != 1) {
         txt_mustbe_1.style.backgroundColor="RED";
     } else {
+        txt_mustbe_1.style.backgroundColor="";
         txt_mustbe_1.style.color="darkgray";
     }
     let txt_section_num = document.getElementById("section_num");

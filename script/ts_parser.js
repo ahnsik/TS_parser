@@ -299,6 +299,7 @@ var set_result = () => {
         document.getElementById("payload_hex").innerText = dump_blob(old_packet, 0);
         document.getElementById("payload_hex_next").innerText = dump_blob(new_packet, 0);
     } else {
+        console.log("whole payload..");
         document.getElementById("payload_hex").innerText = dump_blob(val_payload, 0);
         document.getElementById("payload_hex_next").innerText = "";
     }
